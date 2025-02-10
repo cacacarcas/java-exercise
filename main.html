@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bunny Field</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* General body and background styling */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #d3f8d1; /* Soft green background */
+    }
+
+    /* Header styling */
+    header {
+      text-align: center;
+      padding: 20px;
+      background-color: #ffdfdc; /* Light pink background */
+    }
+
+    h1 {
+      color: #5a5a5a;
+      font-size: 3em;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+
+    /* Container for main content */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    /* Field (background image of grass) */
+    .field {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      background-image: url('grass.jpeg');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+
+    /* Styling for movable rabbits */
+    .movable {
+      position: absolute;
+      cursor: pointer;
+      width: 80px;
+      height: auto;
+    }
+
+    /* Styling for flowers with links */
+    .flower {
+      position: absolute;
+      width: 50px;
+      height: auto;
+      cursor: pointer;
+    }
+
+    .flower:nth-child(1) {
+      top: 20%;
+      left: 30%;
+    }
+
+    .flower:nth-child(2) {
+      top: 50%;
+      left: 60%;
+    }
+
+    .flower:nth-child(3) {
+      top: 70%;
+      left: 20%;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page Header -->
+  <header>
+    <h1>Bunny Field</h1>
+    <p>Click on the rabbits and move them around the field!</p>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Background Image of Grass -->
+    <div class="field">
+      <!-- Rabbit Images that can be moved -->
+      <img src="bun1.png" class="movable" id="rabbit1" alt="Rabbit 1">
+      <img src="bun2.png" class="movable" id="rabbit2" alt="Rabbit 2">
+      <img src="bun3.png" class="movable" id="rabbit3" alt="Rabbit 3">
+      
+      <!-- Flower Images with Links to Bunny Sites -->
+      <a href="https://www.rabbit.org/" target="_blank">
+        <img src="flower1.jpeg" class="flower" alt="Flower 1">
+      </a>
+      <a href="https://bunnyluv.org/" target="_blank">
+        <img src="flower 2.png" class="flower" alt="Flower 2">
+      </a>
+      <a href="https://www.houserabbitguild.org/" target="_blank">
+        <img src="flower3.png" class="flower" alt="Flower 3">
+      </a>
+    </div>
+  </div>
+
+  <!-- JavaScript embedded in HTML -->
+  <script>
+    // Function to make the rabbit images draggable
+    function makeDraggable(rabbit) {
+      rabbit.addEventListener('mousedown', function(event) {
+        // Get the current mouse position relative to the rabbit
+        let shiftX = event.clientX - rabbit.getBoundingClientRect().left;
+        let shiftY = event.clientY - rabbit.getBoundingClientRect().top;
+
+        // Function to move the rabbit based on the mouse position
+        function moveAt(pageX, pageY) {
+          rabbit.style.left = pageX - shiftX + 'px';
+          rabbit.style.top = pageY - shiftY + 'px';
+        }
+
+        // Move the rabbit when the mouse is moved
+        function onMouseMove(event) {
+          moveAt(event.pageX, event.pageY);
+        }
+
+        // Listen for mouse movement
+        document.addEventListener('mousemove', onMouseMove);
+
+        // Stop moving the rabbit when the mouse is released
+        rabbit.addEventListener('mouseup', function() {
+          document.removeEventListener('mousemove', onMouseMove);
+          rabbit.removeEventListener('mouseup', arguments.callee);
+        });
+      });
+
+      rabbit.ondragstart = function() {
+        return false;
+      };
+    }
+
+    // Make each rabbit image draggable
+    let rabbits = document.querySelectorAll('.movable');
+    rabbits.forEach(rabbit => {
+      makeDraggable(rabbit);
+    });
+  </script>
+</body>
+</html>
